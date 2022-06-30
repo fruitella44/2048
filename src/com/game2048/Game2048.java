@@ -2,6 +2,9 @@ package com.game2048;
 
 import com.javarush.engine.cell.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Game2048 extends Game {
     private static final int SIDE = 4;
     private int[][] gameField = new int[SIDE][SIDE];
@@ -24,6 +27,7 @@ public class Game2048 extends Game {
                 setCellColoredNumber(x, y, gameField[y][x]);
             }
         }
+
     }
 
     private void createNewNumber() {
@@ -103,16 +107,33 @@ public class Game2048 extends Game {
     public void onKeyPress(Key key) {
         if (key == Key.LEFT) {
             moveLeft();
+            drawScene();
         } else if (key == Key.RIGHT) {
             moveRight();
+            drawScene();
         } else if (key == Key.UP) {
             moveUp();
+            drawScene();
         } else if (key == Key.DOWN) {
             moveDown();
+            drawScene();
         }
     }
 
     private void moveLeft() {
+        boolean changeCell = false;
+        for (int y = 0; y < gameField.length; y++) {
+            if (compressRow(gameField[y]))
+                changeCell = true;
+
+            if (mergeRow(gameField[y]))
+                changeCell = true;
+
+            if (compressRow(gameField[y]))
+                changeCell = true;
+        }
+
+        if (changeCell) { createNewNumber(); }
 
     }
 
